@@ -12,13 +12,15 @@
                 <h2>@g.Key.name (<a href="@g.Key.html_url">link</a>) (@g.Count())</h2>
                 @foreach (var item in g.OrderBy(i => i.created_at))
                 {
-                    <ul>
-                        <li>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
                             <strong>@item.title</strong> (<a href="@item.html_url">link</a>)
+                        </div>
+                        <div class="panel-body">
                             <div>opened @item.created_at.ToLocalTime().TimeAgo()</div>
                             <div>updated @item.updated_at.ToLocalTime().TimeAgo()</div>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
                 }
             }
         </div>
@@ -29,3 +31,4 @@
             <h2>Documenting/ItemCreation</h2>
         </div>
     </div>
+</div>
