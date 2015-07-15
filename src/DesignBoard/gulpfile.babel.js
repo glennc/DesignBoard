@@ -6,6 +6,8 @@ var bower = require('main-bower-files'),
 var config = {     sassPath: './Client/Styles',     bowerDir: './bower_components'
 }
 
+gulp.task('default', ['bower', 'icons', 'sass']);
+
 gulp.task('bower', () => {
     return gulp.src(bower(), { base: config.bowerDir })
                .pipe(gulp.dest(`./${project.webroot}/lib`));

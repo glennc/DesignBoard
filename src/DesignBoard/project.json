@@ -19,6 +19,11 @@
     "dnx451": { }
   },
 
+ "exclude": [
+    "wwwroot",
+    "node_modules",
+    "bower_components"
+  ],
   "publishExclude": [
     "node_modules",
     "bower_components",
@@ -26,9 +31,7 @@
     "**.user",
     "**.vspscc"
   ],
-  "exclude": [
-    "wwwroot",
-    "node_modules",
-    "bower_components"
-  ]
+  "scripts": {
+    "prepublish": [ "npm install", "bower install", "gulp"]
+  }
 }
