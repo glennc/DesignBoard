@@ -14,6 +14,7 @@ namespace DesignBoard.Model
 
     public class Item
     {
+        public Repository repo { get; set; }
         public string url { get; set; }
         public string labels_url { get; set; }
         public string comments_url { get; set; }
@@ -34,6 +35,12 @@ namespace DesignBoard.Model
         public object closed_at { get; set; }
         public string body { get; set; }
         public float score { get; set; }
+    }
+
+    public class Repository
+    {
+        public string name { get; set; }
+        public string html_url { get; set; }
     }
 
     public class User

@@ -1,4 +1,5 @@
 ﻿@using DesignBoard.Model
+@using TimeAgo
 @model SearchResults
 
 
@@ -6,13 +7,19 @@
     <div class="row">
         <div class="col-md-4">
             <h2>Backlog</h2>
-            @foreach (var item in Model.items)
+            @foreach (var g in Model.items.GroupBy(g => g.repo).OrderBy(g => g.Key.name))
             {
-                <ul>
-                    <li>
-                        @item.title (<a href="@item.html_url">link</a>)
-                    </li>
-                </ul>
+                <h2>@g.Key.name (<a href="@g.Key.html_url">link</a>)</h2>
+                @foreach (var item in g.OrderBy(i => i.created_at))
+                {
+                    <ul>
+                        <li>
+                            <strong>@item.title</strong> (<a href="@item.html_url">link</a>)
+                            <div>opened @item.created_at.ToLocalTime().TimeAgo()</div>
+                            <div>updated @item.updated_at.ToLocalTime().TimeAgo()</div>
+                        </li>
+                    </ul>
+                }
             }
         </div>
         <div class="col-md-4">
@@ -20,5 +27,5 @@
         </div>
         <div class="col-md-4">
             <h2>Documenting/ItemCreation</h2>
-       </div>
+        </div>
     </div>

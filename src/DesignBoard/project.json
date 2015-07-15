@@ -8,7 +8,8 @@
     "Microsoft.AspNet.Server.IIS": "1.0.0-beta5",
     "Microsoft.AspNet.Server.WebListener": "1.0.0-beta5",
     "System.Net.Http": "4.0.0-beta-23019",
-    "Newtonsoft.Json": "7.0.1"
+    "Newtonsoft.Json": "7.0.1",
+    "TimeAgo": "1.0.8"
   },
 
   "commands": {
