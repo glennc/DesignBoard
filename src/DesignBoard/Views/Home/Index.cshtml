@@ -2,8 +2,7 @@
 @using TimeAgo
 @model SearchResults
 
-
-<div class="container">
+<div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
             <h2>Backlog (@Model.items.Length)</h2>
@@ -12,20 +11,20 @@
                 <h2>@g.Key.name (<a href="@g.Key.html_url">link</a>) (@g.Count())</h2>
                 @foreach (var item in g.OrderBy(i => i.created_at))
                 {
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <strong>@item.title</strong> (<a href="@item.html_url">link</a>)
-                        </div>
-                        <div class="panel-body">
-                            <div>opened @item.created_at.ToLocalTime().TimeAgo()</div>
-                            <div>updated @item.updated_at.ToLocalTime().TimeAgo()</div>
-                        </div>
-                    </div>
+                    await Html.RenderPartialAsync("_DesignItemPartial", item);
                 }
             }
         </div>
         <div class="col-md-4">
             <h2>In Design</h2>
+            @foreach (var g in Model.items.Where(i=>i.labels.Any(l=> l.name == "design:inprogress")).GroupBy(g => g.repo).OrderBy(g => g.Key.name))
+            {
+                <h2>@g.Key.name (<a href="@g.Key.html_url">link</a>) (@g.Count())</h2>
+                @foreach (var item in g.OrderBy(i => i.created_at))
+                {
+                    await Html.RenderPartialAsync("_DesignItemPartial", item);
+                }
+            }
         </div>
         <div class="col-md-4">
             <h2>Documenting/ItemCreation</h2>

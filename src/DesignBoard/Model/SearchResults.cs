@@ -35,6 +35,24 @@ namespace DesignBoard.Model
         public object closed_at { get; set; }
         public string body { get; set; }
         public float score { get; set; }
+
+        public bool IsOld
+        {
+            get
+            {
+                var diff = DateTime.Now.Subtract(created_at);
+                return diff.TotalDays > 20;
+            }
+        }
+
+        public bool IsInactive
+        {
+            get
+            {
+                var diff = DateTime.Now.Subtract(updated_at);
+                return diff.TotalDays > 10;
+            }
+        }
     }
 
     public class Repository
