@@ -14,6 +14,7 @@ namespace DesignBoard.Controllers
     public class HomeController : Controller
     {
         const string QUERY = "https://api.github.com/search/issues?sort=created&q=is:issue user:aspnet is:open -repo:aspnet/routing -repo:aspnet/announcements -repo:aspnet/aspnet-docker -repo:aspnet/templates -repo:aspnet/musicstore -repo:aspnet/tooling -repo:aspnet/tooling-internal -repo:aspnet/external -repo:aspnet/mvc -repo:aspnet/razor -repo:aspnet/entityframework -repo:aspnet/identity -repo:aspnet/docs -repo:aspnet/home label:\"needs design\"";
+
         public async Task<IActionResult> Index()
         {
             var httpClient = new HttpClient();
