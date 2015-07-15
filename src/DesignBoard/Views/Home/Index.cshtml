@@ -6,10 +6,10 @@
 <div class="container">
     <div class="row">
         <div class="col-md-4">
-            <h2>Backlog</h2>
+            <h2>Backlog (@Model.items.Length)</h2>
             @foreach (var g in Model.items.GroupBy(g => g.repo).OrderBy(g => g.Key.name))
             {
-                <h2>@g.Key.name (<a href="@g.Key.html_url">link</a>)</h2>
+                <h2>@g.Key.name (<a href="@g.Key.html_url">link</a>) (@g.Count())</h2>
                 @foreach (var item in g.OrderBy(i => i.created_at))
                 {
                     <ul>
