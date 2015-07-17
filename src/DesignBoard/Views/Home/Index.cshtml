@@ -28,6 +28,14 @@
         </div>
         <div class="col-md-4">
             <h2>Documenting/ItemCreation</h2>
+            @foreach (var g in Model.items.Where(i => i.labels.Any(l => l.name == "design:documenting")).GroupBy(g => g.repo).OrderBy(g => g.Key.name))
+            {
+                <h2>@g.Key.name (<a href="@g.Key.html_url">link</a>) (@g.Count())</h2>
+                @foreach (var item in g.OrderBy(i => i.created_at))
+                {
+                    await Html.RenderPartialAsync("_DesignItemPartial", item);
+                }
+            }
         </div>
     </div>
 </div>

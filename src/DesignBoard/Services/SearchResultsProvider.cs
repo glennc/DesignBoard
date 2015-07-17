@@ -34,8 +34,14 @@ namespace DesignBoard.Services
             // HACK: Parse the issue url to get the repository name
             var repos = new Dictionary<string, Repository>();
 
+            var items = new List<Item>();
+
             foreach (var item in results.items)
             {
+                if(string.Equals(item?.milestone?.title, "backlog", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
                 var prefixLength = "https://github.com/aspnet/".Length;
                 var issueUrl = item.html_url;
                 var repoUrl = issueUrl.Substring(0, issueUrl.IndexOf('/', prefixLength + 1));
@@ -51,7 +57,10 @@ namespace DesignBoard.Services
                 repo.name = repoName;
                 repo.html_url = repoUrl;
                 item.repo = repo;
+                items.Add(item);
             }
+
+            results.items = items.ToArray();
             return results;
         }
 
