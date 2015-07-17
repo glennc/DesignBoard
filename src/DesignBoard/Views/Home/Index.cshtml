@@ -5,10 +5,10 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
-            <h2>Backlog (@Model.items.Length)</h2>
+            <h2>Backlog <small>@Model.items.Length</small></h2>
             @foreach (var g in Model.items.GroupBy(g => g.repo).OrderBy(g => g.Key.name))
             {
-                <h2>@g.Key.name (<a href="@g.Key.html_url">link</a>) (@g.Count())</h2>
+                <h3><a href="@g.Key.html_url" target="_blank">@g.Key.name</a> <small>@g.Count()</small></h3>
                 @foreach (var item in g.OrderBy(i => i.created_at))
                 {
                     await Html.RenderPartialAsync("_DesignItemPartial", item);
@@ -19,7 +19,7 @@
             <h2>In Design</h2>
             @foreach (var g in Model.items.Where(i=>i.labels.Any(l=> l.name == "design:inprogress")).GroupBy(g => g.repo).OrderBy(g => g.Key.name))
             {
-                <h2>@g.Key.name (<a href="@g.Key.html_url">link</a>) (@g.Count())</h2>
+                <h3><a href="@g.Key.html_url" target="_blank">@g.Key.name</a> <small>@g.Count()</small></h3>
                 @foreach (var item in g.OrderBy(i => i.created_at))
                 {
                     await Html.RenderPartialAsync("_DesignItemPartial", item);
@@ -30,7 +30,7 @@
             <h2>Documenting/ItemCreation</h2>
             @foreach (var g in Model.items.Where(i => i.labels.Any(l => l.name == "design:documenting")).GroupBy(g => g.repo).OrderBy(g => g.Key.name))
             {
-                <h2>@g.Key.name (<a href="@g.Key.html_url">link</a>) (@g.Count())</h2>
+                <h3><a href="@g.Key.html_url" target="_blank">@g.Key.name</a> <small>@g.Count()</small></h3>
                 @foreach (var item in g.OrderBy(i => i.created_at))
                 {
                     await Html.RenderPartialAsync("_DesignItemPartial", item);

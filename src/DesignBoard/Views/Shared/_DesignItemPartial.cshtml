@@ -2,12 +2,22 @@
 
 @model DesignBoard.Model.Item
 
-<div class="panel panel-default @(Model.IsOld ? "old" : "") @(Model.IsInactive ? "inactive" : "")">
+<div class="panel panel-default @(Model.IsOld ? "panel-warning" : "") @(Model.IsInactive ? "panel-danger" : "")">
     <div class="panel-heading">
-        <strong>@Model.title</strong> (<a href="@Model.html_url">link</a>)
+        <strong><a href="@Model.html_url" target="_blank">@Model.title</a></strong>
     </div>
-    <div class="panel-body">
+    <div class="panel-body @(Model.IsOld ? "old" : "") @(Model.IsInactive ? "inactive" : "")">
         <div>opened @Model.created_at.ToLocalTime().TimeAgo()</div>
         <div>updated @Model.updated_at.ToLocalTime().TimeAgo()</div>
+    </div>
+    <div class="panel-footer clearfix">
+        <div class="pull-right">created by <strong>@@@Model.user.login</strong></div>
+        @if (Model.assignee != null)
+        {
+            <div>assigned to <strong>@@@Model.assignee.login</strong></div>
+        } else
+        {
+            <div><strong>unassigned</strong></div>
+        }
     </div>
 </div>
