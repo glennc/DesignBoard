@@ -1,0 +1,6 @@
+﻿{
+    "GitHub": {
+        "ApiBase": "https://api.github.com/",
+        "BaseQuery": "user:aspnet -repo:aspnet/routing -repo:aspnet/announcements -repo:aspnet/aspnet-docker -repo:aspnet/templates -repo:aspnet/musicstore -repo:aspnet/tooling -repo:aspnet/tooling-internal -repo:aspnet/external -repo:aspnet/mvc -repo:aspnet/razor -repo:aspnet/entityframework -repo:aspnet/identity -repo:aspnet/docs -repo:aspnet/home"
+    }
+}

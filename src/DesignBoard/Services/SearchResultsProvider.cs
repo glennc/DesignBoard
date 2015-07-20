@@ -3,33 +3,37 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using DesignBoard.Model;
 using Microsoft.Framework.Caching.Memory;
+using Microsoft.Framework.Configuration;
 using Newtonsoft.Json;
 
 namespace DesignBoard.Services
 {
     public class SearchResultsProvider : ISearchResultsProvider
     {
-        const string QUERY = "https://api.github.com/search/issues?per_page=100&sort=created&q=is:issue user:aspnet is:open -repo:aspnet/routing -repo:aspnet/announcements -repo:aspnet/aspnet-docker -repo:aspnet/templates -repo:aspnet/musicstore -repo:aspnet/tooling -repo:aspnet/tooling-internal -repo:aspnet/external -repo:aspnet/mvc -repo:aspnet/razor -repo:aspnet/entityframework -repo:aspnet/identity -repo:aspnet/docs -repo:aspnet/home label:\"needs design\"";
+        private readonly string _searchBaseUrl;
+        private readonly string _authToken;
+        const string DefaultApiBase = "https://api.github.com/";
 
         private readonly HttpClient _client = new HttpClient();
 
+        public SearchResultsProvider(IConfiguration config)
+        {
+            _client = new HttpClient()
+            {
+                BaseAddress = new Uri(config.Get("GitHub:ApiBase") ?? DefaultApiBase)
+            };
+            var baseQuery = config.Get("GitHub:BaseQuery");
+            _searchBaseUrl = $"/search/issues?per_page=100&sort=created&q=is:issue is:open label:\"needs design\" {baseQuery}";
+            _authToken = config.Get("GitHub:AuthToken");
+        }
+
         public async Task<SearchResults> GetSearchResultsAsync()
         {
-            var request = BuildHttpRequest(QUERY);
-            var response = await _client.SendAsync(request);
-            // TODO: Handle gracefully
-            response.EnsureSuccessStatusCode();
-            var dataStream = await response.Content.ReadAsStreamAsync();
-
-            SearchResults results = null;
-            using (var reader = new StreamReader(dataStream))
-            {
-                var serializer = new JsonSerializer();
-                results = serializer.Deserialize<SearchResults>(new JsonTextReader(reader));
-            }
+            SearchResults results = await SearchIssues();
 
             // HACK: Parse the issue url to get the repository name
             var repos = new Dictionary<string, Repository>();
@@ -38,7 +42,7 @@ namespace DesignBoard.Services
 
             foreach (var item in results.items)
             {
-                if(string.Equals(item?.milestone?.title, "backlog", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(item?.milestone?.title, "backlog", StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
@@ -64,10 +68,32 @@ namespace DesignBoard.Services
             return results;
         }
 
+        private async Task<SearchResults> SearchIssues()
+        {
+            var request = BuildHttpRequest(_searchBaseUrl);
+            var response = await _client.SendAsync(request);
+            // TODO: Handle gracefully
+            response.EnsureSuccessStatusCode();
+            var dataStream = await response.Content.ReadAsStreamAsync();
+
+            SearchResults results = null;
+            using (var reader = new StreamReader(dataStream))
+            {
+                var serializer = new JsonSerializer();
+                results = serializer.Deserialize<SearchResults>(new JsonTextReader(reader));
+            }
+
+            return results;
+        }
+
         public HttpRequestMessage BuildHttpRequest(string uri)
         {
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, uri);
             requestMessage.Headers.Add("User-Agent", "DesignBoard"); //Github returns a malformed response if there is no user-agent.
+            if (!string.IsNullOrEmpty(_authToken))
+            {
+                requestMessage.Headers.Authorization = new AuthenticationHeaderValue("token", _authToken);
+            }
             return requestMessage;
         }
     }

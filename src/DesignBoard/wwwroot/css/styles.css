@@ -1,7 +1,9 @@
 .old {
-    background-color: orange;
+    background-color: #f09609
 }
 
 .inactive {
-    background-color: orangered;
+    color: white;
+    font-weight: bold;
+    background-color: #e51400
 }
