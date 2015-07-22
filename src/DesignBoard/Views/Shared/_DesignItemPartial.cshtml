@@ -11,13 +11,30 @@
         <div>updated @Model.updated_at.ToLocalTime().TimeAgo()</div>
     </div>
     <div class="panel-footer clearfix">
-        <div class="pull-right">created by <strong>@@@Model.user.login</strong></div>
-        @if (Model.assignee != null)
-        {
-            <div>assigned to <strong>@@@Model.assignee.login</strong></div>
-        } else
-        {
-            <div><strong>unassigned</strong></div>
-        }
+        <div class="row">
+            <div class="col-md-4 text-left">
+                @if (Model.assignee != null)
+                {
+                    <span>assigned to <strong>@@@Model.assignee.login</strong></span>
+                }
+                else
+                {
+                    <strong>unassigned</strong>
+                }
+            </div>
+            <div class="col-md-4 text-center">
+                @if (Model.milestone != null)
+                {
+                    <strong>@Model.milestone.title</strong>
+                }
+                else
+                {
+                    <strong>No Milestone</strong>
+                }
+            </div>
+            <div class="col-md-4 text-right">
+                created by <strong>@@@Model.user.login</strong>
+            </div>
+        </div>
     </div>
 </div>
