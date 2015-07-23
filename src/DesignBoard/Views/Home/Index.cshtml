@@ -4,9 +4,9 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <h2>Backlog <small>@Model.items.Length</small></h2>
-            @foreach (var g in Model.items.GroupBy(g => g.repo).OrderBy(g => g.Key.name))
+            @foreach (var g in Model.items.Where(i => !i.labels.Any(l => l.name == "design:inprogress") && !i.labels.Any(l => l.name == "design:documenting")).GroupBy(g => g.repo).OrderBy(g => g.Key.name))
             {
                 <h3><a href="@g.Key.html_url" target="_blank">@g.Key.name</a> <small>@g.Count()</small></h3>
                 @foreach (var item in g.OrderBy(i => i.created_at))
@@ -15,7 +15,7 @@
                 }
             }
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <h2>In Design</h2>
             @foreach (var g in Model.items.Where(i=>i.labels.Any(l=> l.name == "design:inprogress")).GroupBy(g => g.repo).OrderBy(g => g.Key.name))
             {
@@ -26,9 +26,20 @@
                 }
             }
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <h2>Documenting/ItemCreation</h2>
             @foreach (var g in Model.items.Where(i => i.labels.Any(l => l.name == "design:documenting")).GroupBy(g => g.repo).OrderBy(g => g.Key.name))
+            {
+                <h3><a href="@g.Key.html_url" target="_blank">@g.Key.name</a> <small>@g.Count()</small></h3>
+                @foreach (var item in g.OrderBy(i => i.created_at))
+                {
+                    await Html.RenderPartialAsync("_DesignItemPartial", item);
+                }
+            }
+        </div>
+        <div class="col-md-3">
+            <h2>Designed but not done</h2>
+            @foreach (var g in Model.items.Where(i => i.labels.Any(l => l.name == "design:done")).GroupBy(g => g.repo).OrderBy(g => g.Key.name))
             {
                 <h3><a href="@g.Key.html_url" target="_blank">@g.Key.name</a> <small>@g.Count()</small></h3>
                 @foreach (var item in g.OrderBy(i => i.created_at))

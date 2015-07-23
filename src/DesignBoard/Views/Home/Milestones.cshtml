@@ -1,0 +1,62 @@
+﻿@using DesignBoard.Model
+@using TimeAgo
+@model SearchResults
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Backlog <small>@Model.items.Length</small></h2>
+            @foreach (var g in Model.items.GroupBy(g => g.milestone).OrderByDescending(g=> g.Key?.title))
+            {
+                @if (g.Key == null)
+                {
+                    <h3>No Milestone <small>@g.Count()</small></h3>
+                }
+                else
+                {
+                    <h3>@g.Key.title <small>@g.Count()</small></h3>
+                }
+                @foreach (var item in g.OrderBy(i => i.created_at))
+                {
+                    await Html.RenderPartialAsync("_DesignItemPartial", item);
+                }
+            }
+        </div>
+        <div class="col-md-4">
+            <h2>In Design</h2>
+            @foreach (var g in Model.items.Where(i => i.labels.Any(l => l.name == "design:inprogress")).GroupBy(g => g.milestone).OrderByDescending(x => x.Key?.title))
+            {
+                @if (g.Key == null)
+                {
+                    <h3>No Milestone <small>@g.Count()</small></h3>
+                }
+                else
+                {
+                    <h3>@g.Key.title <small>@g.Count()</small></h3>
+                }
+                @foreach (var item in g.OrderBy(i => i.created_at))
+                {
+                    await Html.RenderPartialAsync("_DesignItemPartial", item);
+                }
+            }
+        </div>
+        <div class="col-md-4">
+            <h2>Documenting/ItemCreation</h2>
+            @foreach (var g in Model.items.Where(i => i.labels.Any(l => l.name == "design:documenting")).GroupBy(g => g.milestone).OrderByDescending(x => x.Key?.title))
+            {
+                @if (g.Key == null)
+                {
+                    <h3>No Milestone <small>@g.Count()</small></h3>
+                }
+                else
+                {
+                    <h3>@g.Key.title <small>@g.Count()</small></h3>
+                }
+                @foreach (var item in g.OrderBy(i => i.created_at))
+                {
+                    await Html.RenderPartialAsync("_DesignItemPartial", item);
+                }
+            }
+        </div>
+    </div>
+</div>

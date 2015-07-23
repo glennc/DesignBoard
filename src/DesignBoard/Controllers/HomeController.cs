@@ -26,5 +26,12 @@ namespace DesignBoard.Controllers
             SearchResults results = await _searchResultsProvider.GetSearchResultsAsync();
             return View(results);
         }
+
+        [Route("/milestones")]
+        public async Task<IActionResult> ByMilestone()
+        {
+            SearchResults results = await _searchResultsProvider.GetSearchResultsAsync();
+            return View("Milestones", results);
+        }
     }
 }

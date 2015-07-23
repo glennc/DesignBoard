@@ -120,6 +120,21 @@ namespace DesignBoard.Model
         public DateTime updated_at { get; set; }
         public object due_on { get; set; }
         public object closed_at { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if( obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            return ((Milestone)obj).title.Equals(title, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.title.ToLowerInvariant().GetHashCode();
+        }
     }
 
     public class Creator
